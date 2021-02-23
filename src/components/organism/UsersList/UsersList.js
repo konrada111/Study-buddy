@@ -1,6 +1,6 @@
 import React from 'react';
 import { users } from 'data/users.js';
-import UsersListItem from 'components/UsersListItem/UsersListItem.js';
+import UsersListItem from 'components/molecules/UsersListItem/UsersListItem.js';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
