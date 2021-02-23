@@ -11,12 +11,13 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.2",
+    "styled-components": "^5.2.1",
     "web-vitals": "^1.1.0"
   },
   "lint-staged": {
-       "src/**/*.{js,json}": [
-       "prettier --write"
-     ]
+    "src/**/*.{js,json}": [
+      "prettier --write"
+    ]
   },
   "husky": {
     "hooks": {
