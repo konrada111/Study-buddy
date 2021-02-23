@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import Button from 'components/atoms/Button/Button';
 import { Wrapper, StyledAverage, StyledInfo } from './UsersListItem.style';
 
-const UserListItem = ({ userData: { name, average, attendance = '0%' } }) => (
+const displayIndex = (index) => alert(index);
+
+const UserListItem = ({ index, userData: { name, average, attendance = '0%' } }) => (
   <Wrapper>
     <StyledAverage averageValue={average}>{average}</StyledAverage>
     <StyledInfo>
       <p>{name}</p>
       <p>Attendance: {attendance}</p>
     </StyledInfo>
-    <Button />
+    <Button onMouseEnter={() => displayIndex(index + 1)} />
   </Wrapper>
 );
 
