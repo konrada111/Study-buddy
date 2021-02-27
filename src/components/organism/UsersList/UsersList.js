@@ -12,7 +12,7 @@ class UsersList extends React.Component {
   //odpala sie kiedy nasz komponent zostanie zamontowany w aplikacji(zostaje wyrenderowany po raz pierwszy)
   componentDidMount() {}
 
-  //odpala sie kiedy doszlo do jakiegos update-u (mozemy porownywac poprzednie propsy, poprzednie stany oraz jego cala konstrukcje ktora zawieral
+  //odpala sie kiedy doszlo do jakiegos update-u (mozemy porownywac poprzednie propsy, poprzednie stany oraz jego cala konstrukcje ktora zawieral)
   componentDidUpdate(prevProps, prevState, snapshot) {}
 
   //uruchamia sie w momencie kiedy jest odmontowany od naszego domu
