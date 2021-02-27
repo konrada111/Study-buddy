@@ -1,47 +1,67 @@
-import React from 'react';
-import { users } from 'data/users.js';
+import React, { useState, useEffect } from 'react';
+import { users as usersData } from 'data/users.js';
 import UsersListItem from 'components/molecules/UsersListItem/UsersListItem.js';
 import { StyledList, Wrapper } from './UsersList.style';
 
-class UsersList extends React.Component {
-  state = {
-    users,
-    isUsersList: true,
+const mockAPI = (success) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (usersData) {
+        resolve([...usersData]);
+      } else {
+        reject({ message: 'Error' });
+      }
+    }, 2000);
+  });
+};
+
+const UsersList = () => {
+  const [users, setUsers] = useState([]); //useState przyjmuje poczatkowy stan
+  const [isLoading, setLoadingState] = useState([]);
+  const [isUsersList, setUsersList] = useState(true);
+
+  //useEffect przyjmuje jako pierwszy argument funkcje ,a jako drugi tablice zaleznosci
+
+  useEffect(() => {
+    setLoadingState(true);
+    mockAPI()
+      .then((data) => {
+        setLoadingState(false);
+        setUsers(data);
+      })
+      .catch((err) => console.log(err));
+
+    //willunmount (kiedy element jest odmontowywany z domu)
+    // return () => {
+    //   window.removeEventListener('nazwaeventu',funkcja);
+    // };
+  }, []); //po przecinku jest dodawane jezeli cos ma sie zmienic (didupdate)
+
+  // useEffect(() => {
+  //   console.log('Loading state has changed');
+  // }, [isLoading]);
+
+  const toggleListTitle = (prevState) => {
+    setUsersList(!prevState);
   };
 
-  //odpala sie kiedy nasz komponent zostanie zamontowany w aplikacji(zostaje wyrenderowany po raz pierwszy)
-  componentDidMount() {}
-
-  //odpala sie kiedy doszlo do jakiegos update-u (mozemy porownywac poprzednie propsy, poprzednie stany oraz jego cala konstrukcje ktora zawieral
-  componentDidUpdate(prevProps, prevState, snapshot) {}
-
-  //uruchamia sie w momencie kiedy jest odmontowany od naszego domu
-  componentWillUnmount() {}
-
-  toggleListTitle = () => {
-    this.setState((prevState) => ({
-      isUsersList: !prevState.isUsersList,
-    }));
+  const deleteUser = (name) => {
+    const filteredUsers = users.filter((user) => user.name !== name);
+    setUsers(filteredUsers);
   };
 
-  deleteUser = (name) => {
-    const filteredUsers = this.state.users.filter((user) => user.name !== name);
-    this.setState({ users: filteredUsers });
-  };
-
-  render() {
-    return (
-      <Wrapper>
-        <h1>{this.state.isUsersList ? `Users List` : `Students List`}</h1>
-        <button onClick={() => this.toggleListTitle(this.state.isUsersList)}>Change title</button>
-        <StyledList>
-          {this.state.users.map((userData) => (
-            <UsersListItem deleteUser={this.deleteUser} key={userData.name} userData={userData} />
-          ))}
-        </StyledList>
-      </Wrapper>
-    );
-  }
-}
+  return (
+    <Wrapper>
+      {/*<h1>{isUsersList ? `User's List` : `Students List`}</h1>*/}
+      {/*<button onClick={() => toggleListTitle(isUsersList)}>Change title</button>*/}
+      <h1>{isLoading ? `Loading...` : ``}</h1>
+      <StyledList>
+        {users.map((userData) => (
+          <UsersListItem deleteUser={deleteUser} key={userData.name} userData={userData} />
+        ))}
+      </StyledList>
+    </Wrapper>
+  );
+};
 
 export default UsersList;
