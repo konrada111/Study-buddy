@@ -3,61 +3,37 @@ import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from 'assets/styles/GlobalStyle';
 import { theme } from 'assets/styles/theme';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { users as usersData } from '../data/users';
+import UsersProvider from 'providers/UsersProvider';
 import { Wrapper } from './Root.style';
 import MainTemplate from 'components/templates/MainTemplate/MainTemplate';
 import AddUser from './AddUser';
 import Dashboard from './Dashboard';
 
-const initialFormState = {
-  name: '',
-  attendance: '',
-  average: '',
-};
+//metoda która przyjmuje domyslna wartosc naszego kontekstu warto ja zawsze tworzyc aby okreslic poczatkowy kształt naszego kontekstu zanim napdpiszemy ja wewnatrz komponentu
+export const UsersContext = React.createContext({
+  users: [],
+  handleNewUser: () => {},
+  deleteUser: () => {},
+});
 
 const Root = () => {
-  const [users, setUsers] = useState(usersData);
-  const [formValues, setFormValues] = useState(initialFormState);
-
-  const handleInputChange = (event) => {
-    console.log(formValues);
-    setFormValues({
-      ...formValues,
-      [event.target.name]: event.target.value,
-    });
-  };
-
-  const deleteUser = (name) => {
-    const filteredUsers = users.filter((user) => user.name !== name);
-    setUsers(filteredUsers);
-  };
-
-  const handleNewUser = (e) => {
-    e.preventDefault();
-    const newUser = {
-      name: formValues.name,
-      attendance: formValues.attendance,
-      average: formValues.average,
-    };
-    setUsers([newUser, ...users]);
-    setFormValues(initialFormState);
-  };
-
   return (
     <Router>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <MainTemplate>
-          <Wrapper>
-            <Switch>
-              <Route path="/add-user">
-                <AddUser handleNewUser={handleNewUser} handleInputChange={handleInputChange} formValues={formValues} />
-              </Route>
-              <Route path="/">
-                <Dashboard deleteUser={deleteUser} users={users} />
-              </Route>
-            </Switch>
-          </Wrapper>
+          <UsersProvider>
+            <Wrapper>
+              <Switch>
+                <Route path="/add-user">
+                  <AddUser />
+                </Route>
+                <Route path="/">
+                  <Dashboard />
+                </Route>
+              </Switch>
+            </Wrapper>
+          </UsersProvider>
         </MainTemplate>
       </ThemeProvider>
     </Router>
